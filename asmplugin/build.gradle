@@ -1,9 +1,35 @@
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'kotlin'
+    id 'maven-publish'
+    id 'kotlin-kapt'
+}
+apply plugin: 'groovy'
+
+dependencies {
+    //gradle sdk
+    implementation gradleApi()
+    //groovy sdk
+    implementation localGroovy()
+
+    implementation 'org.ow2.asm:asm-commons:9.2'
+    implementation 'com.android.tools.build:gradle:7.2.1'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId "com.test"
+            artifactId "asmplugin"
+            version "0.0.1"
+
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            //推送到本地
+            url = uri('../plugin')
+        }
+    }
 }
